@@ -1,0 +1,26 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.weather-card {
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+
+.weather-card:hover {
+    transform: scale(1.03);
+}
+
+.weather-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.toggle-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}

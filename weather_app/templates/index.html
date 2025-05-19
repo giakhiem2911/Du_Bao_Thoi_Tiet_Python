@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang="vi" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Ứng dụng Thời tiết</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="position-relative">
+<div class="container py-4">
+    <h1 class="text-center mb-4 text-primary">🌤 Ứng dụng Dự báo Thời tiết</h1>
+
+```
+<!-- Nút đổi chế độ sáng/tối -->
+<button class="btn btn-outline-secondary toggle-btn" id="toggleTheme">
+    🌙 Dark Mode
+</button>
+
+<form method="POST" class="row g-3 justify-content-center mt-3">
+    <div class="col-md-6">
+        <input type="text" class="form-control" name="city" placeholder="Nhập tên thành phố..." required value="{{ city }}">
+    </div>
+    <div class="col-md-2">
+        <select name="unit" class="form-select">
+            <option value="metric" {% if don_vi == 'metric' %}selected{% endif %}>°C</option>
+            <option value="imperial" {% if don_vi == 'imperial' %}selected{% endif %}>°F</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+    </div>
+</form>
+
+{% if du_bao_ngay == None %}
+    <div class="alert alert-danger mt-4">Không tìm thấy thành phố. Vui lòng thử lại.</div>
+{% endif %}
+
+{% if du_bao_ngay %}
+<div class="row mt-5">
+    <div class="col-md-6">
+        <h4 class="text-secondary mb-3">📅 Dự báo 5 ngày</h4>
+        <div class="d-flex flex-wrap gap-3">
+            {% for ngay, muc in du_bao_ngay.items() %}
+                <div class="p-3 weather-card text-center" style="width: 160px;">
+                    <div class="fw-bold">{{ ngay|datetimeformat }}</div>
+                    <img class="weather-icon" src="http://openweathermap.org/img/wn/{{ muc.icon }}@2x.png" alt="icon">
+                    <div class="text-capitalize">{{ muc.mo_ta }}</div>
+                    <div class="fw-bold">{{ muc.nhiet_do }}{{ "°C" if don_vi == 'metric' else "°F" }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h4 class="text-secondary mb-3">⏰ Thời tiết hôm nay</h4>
+        <div class="list-group shadow-sm">
+            {% for muc in du_bao_gio %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><strong>{{ muc.gio }}</strong> - <span class="text-capitalize">{{ muc.mo_ta }}</span></span>
+                    <span>
+                        {{ muc.nhiet_do }}{{ "°C" if don_vi == 'metric' else "°F" }}
+                        <img src="http://openweathermap.org/img/wn/{{ muc.icon }}@2x.png" alt="icon" width="40">
+                    </span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+```
+
+</div>
+
+<script>
+    const toggleBtn = document.getElementById('toggleTheme');
+    const htmlTag = document.documentElement;
+
+    toggleBtn.addEventListener('click', () => {
+        const currentTheme = htmlTag.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        htmlTag.setAttribute('data-bs-theme', newTheme);
+        toggleBtn.innerHTML = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+</script>
+
+</body>
+</html>
