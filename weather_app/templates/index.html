@@ -242,6 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     div.addEventListener('click', () => {
                         cityInput.value = city.description;
                         suggestionsBox.style.display = 'none';
+                        cityInput.form.submit();
                     });
                     suggestionsBox.appendChild(div);
                 });
