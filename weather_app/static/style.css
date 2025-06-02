@@ -1,6 +1,92 @@
 body {
     font-family: 'Segoe UI', sans-serif;
 }
+.weather-dynamic-text {
+    color: transparent !important;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+    border-width: 1px;
+}
+
+/* MƯA */
+body.weather-text-rainy .weather-dynamic-text {
+    background-image: linear-gradient(45deg, #5ab0f5, #024082);
+    border-color: #5ab0f5 !important;
+}
+body.weather-text-rainy .weather-dynamic-text:hover {
+    color: white !important;
+    border-color: #007BFF !important;
+}
+body.weather-text-rainy button.weather-dynamic-text:hover {
+    background-color: #007BFF !important;
+}
+
+/* NẮNG */
+body.weather-text-sunny .weather-dynamic-text {
+    background-image: linear-gradient(45deg, #ffe082, #FFC107);
+    border-color: #ffe082 !important;
+}
+body.weather-text-sunny .weather-dynamic-text:hover {
+    color: black !important;
+    border-color: #FFC107 !important;
+}
+body.weather-text-sunny button.weather-dynamic-text:hover {
+    background-color: #FFC107 !important;
+}
+
+/* MÂY */
+body.weather-text-cloudy .weather-dynamic-text {
+    background-image: linear-gradient(45deg, #adb5bd, #6c757d);
+    border-color: #adb5bd !important;
+}
+body.weather-text-cloudy .weather-dynamic-text:hover {
+    color: white !important;
+    border-color: #6c757d !important;
+}
+body.weather-text-cloudy button.weather-dynamic-text:hover {
+    background-color: #6c757d !important;
+}
+
+/* GIÔNG */
+body.weather-text-stormy .weather-dynamic-text {
+    background-image: linear-gradient(45deg, #b197fc, #6610f2);
+    border-color: #b197fc !important;
+}
+body.weather-text-stormy .weather-dynamic-text:hover {
+    color: white !important;
+    border-color: #6610f2 !important;
+}
+body.weather-text-stormy button.weather-dynamic-text:hover {
+    background-color: #6610f2 !important;
+}
+
+/* SƯƠNG MÙ */
+body.weather-text-foggy .weather-dynamic-text {
+    background-image: linear-gradient(45deg, #dee2e6, #adb5bd);
+    border-color: #dee2e6 !important;
+}
+body.weather-text-foggy .weather-dynamic-text:hover {
+    color: black !important;
+    border-color: #adb5bd !important;
+}
+body.weather-text-foggy button.weather-dynamic-text:hover {
+    background-color: #adb5bd !important;
+}
+
+/* TUYẾT */
+body.weather-text-snowy .weather-dynamic-text {
+    background-image: linear-gradient(45deg, #66d9e8, #04acce);
+    border-color: #66d9e8 !important;
+}
+body.weather-text-snowy .weather-dynamic-text:hover {
+    color: white !important;
+    border-color: #0dcaf0 !important;
+}
+body.weather-text-snowy button.weather-dynamic-text:hover {
+    background-color: #0dcaf0 !important;
+}
 
 .weather-card {
     border-radius: 16px;
@@ -58,9 +144,6 @@ body {
     z-index: -1;
     opacity: 0.3;
     pointer-events: none;
-}
-.text-light{
-    color: #f8f9fa !important; /* Màu trắng nhạt */
 }
       #suggestions {
         position: absolute;
