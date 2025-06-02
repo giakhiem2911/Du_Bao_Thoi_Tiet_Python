@@ -97,10 +97,15 @@ def weather_by_location():
         data = res.json()
 
         if data and len(data) > 0:
-            city_name = data[0].get("name")
-            return redirect(url_for("index", city=city_name))
+            # Lấy city theo cấu trúc hợp lý hơn
+            city_name = data[0].get("name") or data[0].get("local_names", {}).get("vi") or data[0].get("local_names", {}).get("en")
+
+            if city_name:
+                return redirect(url_for("index", city=city_name))
+            else:
+                return jsonify({"error": "Không thể xác định tên thành phố."}), 400
         else:
-            return jsonify({"error": "Không thể xác định tên thành phố."}), 400
+            return jsonify({"error": "Không có dữ liệu reverse geocoding."}), 400
     except:
         return jsonify({"error": "Lỗi kết nối đến OpenWeatherMap."}), 500
 
