@@ -25,6 +25,12 @@ body {
     top: 20px;
 }
 
+.custom-hover:hover {
+    color: white !important;
+    background-color: #6c757d; /* màu xám của btn-outline-secondary */
+    border-color: #6c757d;
+}
+
 #animated-bg {
     position: fixed;
     top: 0;
@@ -53,6 +59,25 @@ body {
     opacity: 0.3;
     pointer-events: none;
 }
+.text-light{
+    color: #f8f9fa !important; /* Màu trắng nhạt */
+}
+      #suggestions {
+        position: absolute;
+        background: white;
+        border: 1px solid #ccc;
+        width: 100%;
+        max-height: 180px;
+        overflow-y: auto;
+        z-index: 1050;
+        cursor: pointer;
+      }
+      #suggestions div {
+        padding: 8px 12px;
+      }
+      #suggestions div:hover {
+        background-color: #f0f0f0;
+      }
 /* 
 .ios-weather-box {
     background: linear-gradient(135deg, rgba(0, 123, 255, 0.9), rgba(0, 70, 255, 0.7));

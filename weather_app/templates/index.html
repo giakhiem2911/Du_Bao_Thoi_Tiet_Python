@@ -20,9 +20,10 @@
         <i class="bi bi-moon-stars"></i> Dark Mode
     </button>
 
-    <form method="POST" class="row g-3 justify-content-center mt-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" name="city" placeholder="Input the city name..." required value="{{ thanh_pho }}">
+    <form method="POST" class="row g-3 justify-content-center mt-3 position-relative">
+        <div class="col-md-6 position-relative">
+            <input type="text" id="cityInput" class="form-control" name="city" placeholder="Input the city name..." autocomplete="off" required value="{{ thanh_pho }}">
+            <div id="suggestions" style="display:none;"></div>
         </div>
         <div class="col-md-2">
             <select name="don_vi" id="donViSelect" class="form-select">
@@ -36,22 +37,28 @@
             </button>
         </div>
         <div class="text-center">
-            <button type="button" class="text-secondary btn btn-outline-secondary mt-3" onclick="getLocation()">
+            <button type="button" class="text-secondary btn btn-outline-secondary mt-3 custom-hover" onclick="getLocation()">
                 <i class="bi bi-geo-alt-fill"></i> My Location
             </button>
         </div>
 
         {% if du_bao_gio %}
+
         <div class="d-flex justify-content-center mt-4">
             <div class="ios-weather-box p-4 rounded-4 shadow-sm text-white text-center" style="max-width: 400px; width: 100%;">
-                <div class="fs-4 fw-semibold">{{ thanh_pho }}</div>
-                <div class="fs-6 text-light mb-2">{{ du_bao_gio[0].gio }} • {{ du_bao_gio[0].mo_ta|capitalize }}</div>
+                <div class="fs-4 fw-semibold text-light">{{ thanh_pho }}</div>
+                <div class="fs-6 text-light mb-2">
+                    {{ gio_hien_tai }} • {{ du_bao_gio[0].mo_ta|capitalize }}
+                </div>
                 <div class="d-flex justify-content-center align-items-center mb-2">
                     <img src="http://openweathermap.org/img/wn/{{ du_bao_gio[0].icon }}@2x.png" alt="icon" style="width: 64px;">
-                    <div class="fs-1 fw-bold ms-2">{{ du_bao_gio[0].nhiet_do }}{{ "°C" if don_vi == 'metric' else "°F" }}</div>
+                    <div class="fs-1 fw-bold ms-2 text-light">
+                        {{ du_bao_gio[0].nhiet_do }}{{ "°C" if don_vi == 'metric' else "°F" }}
+                    </div>
                 </div>
             </div>
         </div>
+
         {% endif %}
     </form>
 
@@ -204,5 +211,55 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
+<script>
+    // Phần gợi ý tìm kiếm thành phố
+    const cityInput = document.getElementById('cityInput');
+    const suggestionsBox = document.getElementById('suggestions');
+
+    cityInput.addEventListener('input', () => {
+        const query = cityInput.value.trim();
+
+        if (query.length < 2) {
+            suggestionsBox.style.display = 'none';
+            suggestionsBox.innerHTML = '';
+            return;
+        }
+
+        fetch(`/suggest_city?query=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(JSON.stringify(data, null, 2));
+                if (data.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = '';
+                    return;
+                }
+
+                suggestionsBox.innerHTML = '';
+                data.forEach(city => {
+                    const div = document.createElement('div');
+                    div.textContent = city.description; 
+                    div.addEventListener('click', () => {
+                        cityInput.value = city.description;
+                        suggestionsBox.style.display = 'none';
+                    });
+                    suggestionsBox.appendChild(div);
+                });
+                suggestionsBox.style.display = 'block';
+            })
+            .catch(() => {
+                suggestionsBox.style.display = 'none';
+                suggestionsBox.innerHTML = '';
+            });
+    });
+
+    // Ẩn gợi ý khi click ra ngoài
+    document.addEventListener('click', (e) => {
+        if (!suggestionsBox.contains(e.target) && e.target !== cityInput) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
