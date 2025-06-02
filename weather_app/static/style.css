@@ -111,12 +111,6 @@ body.weather-text-snowy button.weather-dynamic-text:hover {
     top: 20px;
 }
 
-.custom-hover:hover {
-    color: white !important;
-    background-color: #6c757d; /* màu xám của btn-outline-secondary */
-    border-color: #6c757d;
-}
-
 #animated-bg {
     position: fixed;
     top: 0;
