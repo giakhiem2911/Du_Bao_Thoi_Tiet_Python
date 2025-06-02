@@ -38,7 +38,7 @@ body.weather-text-sunny button.weather-dynamic-text:hover {
 
 /* MÂY */
 body.weather-text-cloudy .weather-dynamic-text {
-    background-image: linear-gradient(45deg, #adb5bd, #6c757d);
+    background-image: linear-gradient(45deg, #adb5bd, #31363a);
     border-color: #adb5bd !important;
 }
 body.weather-text-cloudy .weather-dynamic-text:hover {
