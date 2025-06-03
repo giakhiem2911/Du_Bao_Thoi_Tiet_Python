@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 API_KEY = "8e211d1ec08a99e281b338e8b79126be"
 
+# Gợi ý tên thành phố
 @app.route("/suggest_city")
 def suggest_city():
     query = request.args.get("query", "")
@@ -43,43 +44,8 @@ def suggest_city():
         print("Lỗi tìm kiếm gợi ý thành phố:", e)
         return jsonify([])
 
-# @app.route("/search_city")
-# def search_city():
-#     keyword = request.args.get("q", "")
-#     if not keyword:
-#         return jsonify([])
 
-#     url = f"http://api.openweathermap.org/geo/1.0/direct?q={keyword}&limit=5&appid={API_KEY}"
-#     try:
-#         res = requests.get(url, timeout=10)
-#         res.raise_for_status()
-#         data = res.json()
-
-#         results = []
-#         for item in data:
-#             name = item.get("name")
-#             state = item.get("state", "")
-#             country = item.get("country", "")
-#             # Tạo chuỗi mô tả (có state hoặc không)
-#             description = name
-#             if state:
-#                 description += f", {state}"
-#             if country:
-#                 description += f", {country}"
-
-#             results.append({
-#                 "name": name,
-#                 "description": description,
-#                 "lat": item.get("lat"),
-#                 "lon": item.get("lon")
-#             })
-
-#         return jsonify(results)
-#     except Exception as e:
-#         print("Lỗi tìm kiếm thành phố:", e)
-#         return jsonify([])
-
-
+# Lấy thời tiết theo tên thành phố
 @app.route("/weather_by_location", methods=["POST"])
 def weather_by_location():
     data = request.get_json()
@@ -97,7 +63,7 @@ def weather_by_location():
         data = res.json()
 
         if data and len(data) > 0:
-            # Lấy city theo cấu trúc hợp lý hơn
+            # Lấy tên thành phố từ dữ liệu reverse geocoding
             city_name = data[0].get("name") or data[0].get("local_names", {}).get("vi") or data[0].get("local_names", {}).get("en")
 
             if city_name:
@@ -109,7 +75,7 @@ def weather_by_location():
     except:
         return jsonify({"error": "Lỗi kết nối đến OpenWeatherMap."}), 500
 
-
+# Định dạng ngày giờ cho template
 @app.template_filter('datetimeformat')
 def datetimeformat(value, format='%d/%m/%Y'):
     try:
@@ -118,6 +84,7 @@ def datetimeformat(value, format='%d/%m/%Y'):
     except Exception:
         return value
 
+# Lấy dự báo thời tiết 5 ngày tiếp theo cho thành phố
 def lay_du_bao_5_ngay(thanh_pho, api_key, units):
     url = f"https://api.openweathermap.org/data/2.5/forecast?q={thanh_pho}&appid={api_key}&units={units}"
     try:
@@ -141,6 +108,7 @@ def lay_du_bao_5_ngay(thanh_pho, api_key, units):
     except:
         return None
 
+# Lấy dự báo thời tiết theo giờ cho thành phố
 def lay_du_bao_theo_gio(thanh_pho, api_key, units):
     url = f"https://api.openweathermap.org/data/2.5/forecast?q={thanh_pho}&appid={api_key}&units={units}"
     try:
@@ -168,6 +136,7 @@ def lay_du_bao_theo_gio(thanh_pho, api_key, units):
         print("Lỗi lấy dự báo theo giờ:", e)
         return None
 
+# Trang chính hiển thị dự báo thời tiết
 @app.route('/', methods=['GET', 'POST'])
 def index():
     du_bao_ngay = du_bao_gio = None
