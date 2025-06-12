@@ -1,0 +1,22 @@
+# Sử dụng Python 3.11
+FROM python:3.11-slim
+
+# Tạo thư mục app
+WORKDIR /app
+
+# Copy file code vào image
+COPY . /app
+
+# Cài đặt các thư viện cần thiết
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Mặc định cổng Flask chạy
+EXPOSE 8080
+
+# Biến môi trường cho Flask
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=8080
+
+# Lệnh chạy Flask
+CMD ["flask", "run"]
