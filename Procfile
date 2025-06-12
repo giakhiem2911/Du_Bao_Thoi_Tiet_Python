@@ -1,1 +1,1 @@
-web: python weather_app/app.py
+web: python -m weather_app.app
